@@ -1,0 +1,12 @@
+﻿@model IEnumerable<KampusPortal.Models.Club>
+
+	<h2>Kulüpler</h2>
+
+	<ul>
+		@foreach (var club in Model)
+	{
+		<li>
+			<a asp-action="Details" asp-route-id="@club.Id">@club.Name</a>
+			</li>
+	}
+</ul>
