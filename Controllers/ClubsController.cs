@@ -1,4 +1,5 @@
-﻿using KampusPortal.Data;
+﻿using KampusPortal.Models;
+using KampusPortal.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,25 @@ namespace KampusPortal.Controllers
             if (club == null)
             {
                 return NotFound();
+            }
+            return View(club);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Club club)
+        {
+            if(ModelState.IsValid)
+            {
+                _context.Clubs.Add(club);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(club);
         }
