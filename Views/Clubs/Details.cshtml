@@ -1,0 +1,22 @@
+﻿@model KampusPortal.Models.Club
+
+<h2>@Model.Name</h2>
+<p><strong>Kategori:</strong> @Model.Category</p>
+<p>@Model.Description</p>
+
+<h4>Etkinlikler</h4>
+@if (Model.Events.Any())
+{
+	<ul>
+		@foreach (var ev in Model.Events)
+		{
+			<li>@ev.Title - @ev.EventDate.ToShortDateString() (@ev.Location)</li>
+		}
+	</ul>
+}
+else
+{
+	<p>Bu kulübe ait henüz bir etkinlik yok.</p>
+}
+
+<a asp-action="Index">Listeye Dön</a>

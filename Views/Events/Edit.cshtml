@@ -1,0 +1,42 @@
+@model KampusPortal.Models.Event
+
+<h2>Etkinliği Düzenle</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="ClubId">Kulüp</label><br />
+        <select asp-for="ClubId" asp-items="ViewBag.Clubs"></select>
+    </div>
+    <br />
+    <div>
+        <label asp-for="Title">Etkinlik Başlığı</label><br />
+        <input asp-for="Title" />
+        <span asp-validation-for="Title" style="color:red"></span>
+    </div>
+    <br />
+    <div>
+        <label asp-for="EventDate">Tarih ve Saat</label><br />
+        <input asp-for="EventDate" type="datetime-local" />
+    </div>
+    <br />
+    <div>
+        <label asp-for="Location">Konum</label><br />
+        <input asp-for="Location" />
+    </div>
+    <br />
+    <div>
+        <label asp-for="Description">Açıklama</label><br />
+        <textarea asp-for="Description"></textarea>
+    </div>
+    <br />
+    <button type="submit">Güncelle</button>
+    <a asp-action="Index">İptal</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

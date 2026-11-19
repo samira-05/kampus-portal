@@ -1,0 +1,30 @@
+﻿@model KampusPortal.Models.Club
+
+<h2>Yeni Kulüp Ekle</h2>
+
+<form asp-action="Create" method="post">
+	<div>
+		<label asp-for="Name">Kulüp Adı</label><br />
+		<input asp-for="Name" />
+		<span asp-validation-for="Name" style="color:red"></span>
+	</div>
+	<br />
+	<div>
+		<label asp-for="Category">Kategori</label><br />((
+		<select asp-for="Category" asp-items="Html.GetEnumSelectList<KampusPortal.Models.ClubCategory>()"></select>
+	</div>
+	<br />
+	<div>
+		<label asp-for="Description">Açıklama</label><br />
+		<textarea asp-for="Description"></textarea>
+	</div>
+	<br />
+	<button type="submit">Kaydet</button>
+	<a asp-action="Index">İptal</a>
+</form>
+
+@section Scripts {
+@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
