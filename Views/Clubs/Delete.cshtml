@@ -1,0 +1,16 @@
+﻿@model KampusPortal.Models.Club
+
+<h2>Kulübü Sil</h2>
+<p>Bu kulübü silmek istediğinize emin misiniz?</p>
+
+<div>
+    <p><strong>Kulüp Adı:</strong> @Model.Name</p>
+    <p><strong>Kategori:</strong> @Model.Category</p>
+    <p><strong>Açıklama:</strong> @Model.Description</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" style="color:red">Evet, Sil</button>
+    <a asp-action="Index">Vazgeç</a>
+</form>

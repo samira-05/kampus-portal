@@ -1,4 +1,5 @@
-﻿using KampusPortal.Models;
+﻿// Kulüplerin listeleme, detay, ekleme, düzenleme ve silme işlemlerini yöneten Controller
+using KampusPortal.Models;
 using KampusPortal.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ namespace KampusPortal.Controllers
             }
             return View(club);
         }
-
+        //Create new club
         [HttpGet]
         public IActionResult Create()
         {
@@ -55,6 +56,59 @@ namespace KampusPortal.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(club);
+        }
+
+        //Edit 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var club = await _context.Clubs.FindAsync(id);
+            if (club == null) return NotFound();
+
+            return View(club);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Club club)
+        {
+            if (id != club.Id) return NotFound();
+
+            if(ModelState.IsValid)
+            {
+                _context.Update(club);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(club);
+        }
+
+        //Delete
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var club = await _context.Clubs.FirstOrDefaultAsync(c => c.Id == id);
+            if (club == null) return NotFound();
+
+            return View(club);
+        }
+
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var club = await _context.Clubs.FindAsync(id);
+            if(club != null)
+            {
+                _context.Clubs.Remove(club);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

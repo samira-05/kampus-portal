@@ -10,7 +10,9 @@
 		@foreach (var club in Model)
 	{
 		<li>
-			<a asp-action="Details" asp-route-id="@club.Id">@club.Name</a>
+			<a asp-action="Details" asp-route-id="@club.Id">@club.Name</a> |
+			<a asp-action="Edit" asp-route-id="@club.Id">Düzenle</a> |
+			<a asp-action="Delete" asp-route-id="@club.Id">Sil</a>
 			</li>
 	}
 </ul>
