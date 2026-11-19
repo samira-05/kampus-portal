@@ -1,0 +1,19 @@
+@model IEnumerable<KampusPortal.Models.Event>
+
+<h2>Etkinlikler</h2>
+
+<p>
+    <a asp-action="Create">+ Yeni Etkinlik Ekle</a>
+</p>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+            (@item.Club?.Name - @item.EventDate.ToString("dd.MM.yyyy HH:mm")) |
+            <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+        </li>
+    }
+</ul>

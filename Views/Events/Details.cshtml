@@ -1,0 +1,11 @@
+@model KampusPortal.Models.Event
+
+<h2>@Model.Title</h2>
+
+<p><strong>Kulüp:</strong> @Model.Club?.Name</p>
+<p><strong>Tarih:</strong> @Model.EventDate.ToString("dd.MM.yyyy HH:mm")</p>
+<p><strong>Konum:</strong> @Model.Location</p>
+<p><strong>Açıklama:</strong> @Model.Description</p>
+
+<a asp-action="Edit" asp-route-id="@Model.Id">Düzenle</a> |
+<a asp-action="Index">Listeye Dön</a>

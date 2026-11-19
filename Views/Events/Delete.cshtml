@@ -1,0 +1,16 @@
+@model KampusPortal.Models.Event
+
+<h2>Etkinliği Sil</h2>
+<p>Bu etkinliği silmek istediğinize emin misiniz?</p>
+
+<div>
+    <strong>@Model.Title</strong> (@Model.Club?.Name - @Model.EventDate.ToString("dd.MM.yyyy HH:mm"))
+</div>
+<br />
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" style="color:red">Evet, Sil</button>
+    <a asp-action="Index">Vazgeç</a>
+</form>
+
