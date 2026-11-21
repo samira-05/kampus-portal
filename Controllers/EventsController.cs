@@ -15,7 +15,7 @@ namespace KampusPortal.Controllers
             _context = context;
         }
 
-        // GET: /Events
+        //Index
         public async Task<IActionResult> Index()
         {
             var events = await _context.Events
@@ -24,7 +24,7 @@ namespace KampusPortal.Controllers
             return View(events);
         }
 
-        // GET: /Events/Details/5
+        //Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -38,17 +38,21 @@ namespace KampusPortal.Controllers
             return View(eventItem);
         }
 
-        // GET: /Events/Create
+        //Create
         public IActionResult Create()
         {
             ViewBag.Clubs = new SelectList(_context.Clubs, "Id", "Name");
             return View();
         }
 
-        // POST: /Events/Create
         [HttpPost]
         public async Task<IActionResult> Create(Event eventItem)
         {
+            if (eventItem.EventDate < DateTime.Now)
+            {
+                ModelState.AddModelError("EventDate", "Etkinlik tarihi geçmiş bir tarih olamaz.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Events.Add(eventItem);
@@ -59,7 +63,7 @@ namespace KampusPortal.Controllers
             return View(eventItem);
         }
 
-        // GET: /Events/Edit/5
+        //Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -71,11 +75,15 @@ namespace KampusPortal.Controllers
             return View(eventItem);
         }
 
-        // POST: /Events/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Event eventItem)
         {
             if (id != eventItem.Id) return NotFound();
+
+            if (eventItem.EventDate < DateTime.Now)
+            {
+                ModelState.AddModelError("EventDate", "Etkinlik tarihi geçmiş bir tarih olamaz.");
+            }
 
             if (ModelState.IsValid)
             {
@@ -87,7 +95,7 @@ namespace KampusPortal.Controllers
             return View(eventItem);
         }
 
-        // GET: /Events/Delete/5
+        //Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -101,7 +109,6 @@ namespace KampusPortal.Controllers
             return View(eventItem);
         }
 
-        // POST: /Events/Delete/5
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

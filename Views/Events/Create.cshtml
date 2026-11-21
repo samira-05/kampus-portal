@@ -17,11 +17,13 @@
     <div>
         <label asp-for="EventDate">Tarih ve Saat</label><br />
         <input asp-for="EventDate" type="datetime-local" />
+        <span asp-validation-for="EventDate" style="color:red"></span>
     </div>
     <br />
     <div>
         <label asp-for="Location">Konum</label><br />
         <input asp-for="Location" />
+        <span asp-validation-for="Location" style="color:red"></span>
     </div>
     <br />
     <div>

@@ -1,4 +1,4 @@
-﻿// Kulüplerin listeleme, detay, ekleme, düzenleme ve silme işlemlerini yöneten Controller
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using KampusPortal.Models;
 using KampusPortal.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +15,29 @@ namespace KampusPortal.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        //Index
+        public async Task<IActionResult> Index(string searchString, ClubCategory? categoryFilter)
         {
-            var clubs = await _context.Clubs.ToListAsync();
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(ClubCategory)), categoryFilter);
+            ViewBag.CurrentSearch = searchString;
+
+            var clubsQuery = _context.Clubs.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                clubsQuery = clubsQuery.Where(c => c.Name.ToLower().Contains(searchString.ToLower()));
+            }
+
+            if (categoryFilter.HasValue)
+            {
+                clubsQuery = clubsQuery.Where(c => c.Category == categoryFilter.Value);
+            }
+
+            var clubs = await clubsQuery.ToListAsync();
             return View(clubs);
         }
 
+        //Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
