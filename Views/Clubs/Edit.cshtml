@@ -1,29 +1,48 @@
-﻿@model KampusPortal.Models.Club
+﻿@model Club
 
-<h2>Kulübü Düzenle</h2>
+@{
+    ViewData["Title"] = "Kulübü Düzenle";
+}
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+<div class="row justify-content-center my-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="bg-white rounded-4 shadow-sm p-4 p-md-5" style="border: 1px solid rgba(99, 102, 241, 0.12);">
+            <h1 class="h4 fw-bold mb-4" style="color: #1e1b4b;">Kulübü Düzenle</h1>
 
-    <div>
-        <label asp-for="Name">Kulüp Adı</label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name" style="color:red"></span>
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold" style="color: #1e1b4b;">Kulüp Adı</label>
+                    <input asp-for="Name" class="form-control rounded-3" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Category" class="form-label fw-semibold" style="color: #1e1b4b;">Kategori</label>
+                    <select asp-for="Category" asp-items="Html.GetEnumSelectList<ClubCategory>()" class="form-select rounded-3"></select>
+                    <span asp-validation-for="Category" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label fw-semibold" style="color: #1e1b4b;">Açıklama</label>
+                    <textarea asp-for="Description" rows="4" class="form-control rounded-3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <button type="submit" class="btn px-4 py-2 rounded-pill fw-semibold text-white" style="background: #6941c6;">
+                        Güncelle
+                    </button>
+                    <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill border">
+                        İptal
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    <br />
-    <div>
-        <label asp-for="Category">Kategori</label><br />
-        <select asp-for="Category" asp-items="Html.GetEnumSelectList<KampusPortal.Models.ClubCategory>()"></select>
-    </div>
-    <br />
-    <div>
-        <label asp-for="Description">Açıklama</label><br />
-        <textarea asp-for="Description"></textarea>
-    </div>
-    <br />
-    <button type="submit">Güncelle</button>
-    <a asp-action="Index">İptal</a>
-</form>
+</div>
 
 @section Scripts {
     @{

@@ -1,11 +1,54 @@
-@model KampusPortal.Models.Event
+@model Event
 
-<h2>@Model.Title</h2>
+@{
+    ViewData["Title"] = Model.Title;
+}
 
-<p><strong>Kulüp:</strong> @Model.Club?.Name</p>
-<p><strong>Tarih:</strong> @Model.EventDate.ToString("dd.MM.yyyy HH:mm")</p>
-<p><strong>Konum:</strong> @Model.Location</p>
-<p><strong>Açıklama:</strong> @Model.Description</p>
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-4 shadow-sm p-4 p-md-5" style="border: 1px solid rgba(99, 102, 241, 0.12);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                @if (Model.Club != null)
+                {
+                    <span class="badge rounded-pill px-3 py-2" style="background: #eef2ff; color: #4f46e5; font-weight: 600;">
+                        @Model.Club.Category
+                    </span>
+                }
+                <span class="text-muted small">🕒 @Model.EventDate.ToString("dd.MM.yyyy HH:mm")</span>
+            </div>
 
-<a asp-action="Edit" asp-route-id="@Model.Id">Düzenle</a> |
-<a asp-action="Index">Listeye Dön</a>
+            <h1 class="h3 fw-bold mb-4" style="color: #1e1b4b;">@Model.Title</h1>
+
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    <div class="p-3 rounded-3" style="background: #f8f7ff;">
+                        <div class="small text-muted mb-1">Kulüp</div>
+                        <div class="fw-semibold" style="color: #1e1b4b;">@(Model.Club?.Name ?? "-")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 rounded-3" style="background: #f8f7ff;">
+                        <div class="small text-muted mb-1">Konum</div>
+                        <div class="fw-semibold" style="color: #1e1b4b;">📍 @Model.Location</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="small fw-semibold text-muted mb-1">Açıklama</div>
+                <p class="mb-0" style="color: #334155; line-height: 1.6;">@Model.Description</p>
+            </div>
+
+            <hr class="my-4" style="opacity: 0.12;" />
+
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn px-4 py-2 rounded-pill fw-semibold text-white" style="background: #6941c6;">
+                    Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 rounded-pill">
+                    Listeye Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

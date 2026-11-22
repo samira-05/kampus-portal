@@ -1,34 +1,200 @@
 ﻿@model IEnumerable<KampusPortal.Models.Club>
+@using KampusPortal.Models
 
-	<h2>Kulüpler</h2>
+@{
+    ViewData["Title"] = "Kulüpler";
+    var currentSearch = ViewData["CurrentFilter"] as string ?? "";
+    var currentCategory = ViewData["CurrentCategory"] as ClubCategory?;
+}
 
-	<p>
-		<a asp-action="Create">+ Yeni Kulüp Ekle</a>
-	</p>
+<style>
+    .kp-unified-stage {
+        background: rgba(255, 255, 255, 0.90);
+        border: 1px solid #ffffff;
+        border-radius: 28px;
+        padding: 1.65rem;
+        box-shadow: 0 16px 38px rgba(34, 38, 75, 0.07);
+    }
 
-<form asp-action="Index" method="get" class="row g-2 mb-3">
-	<div class="col-md-5">
-		<input type="text" name="searchString" value="@ViewBag.CurrentSearch"
-			   class="form-control" placeholder="Kulüp adına göre ara..." />
-	</div>
-	<div class="col-md-4">
-		<select name="categoryFilter" asp-items="ViewBag.Categories" class="form-select">
-			<option value="">-- Tüm Kategoriler --</option>
-		</select>
-	</div>
-	<div class="col-md-3">
-		<button type="submit" class="btn btn-primary">Filtrele</button>
-		<a asp-action="Index" class="btn btn-secondary">Temizle</a>
-	</div>
-</form>
+    .kp-filter-bar {
+        background: linear-gradient(125deg, #ececfa 0%, #f5f2fc 58%, #fbeae1 100%);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 1rem 1.25rem;
+    }
 
-	<ul>
-		@foreach (var club in Model)
-	{
-		<li>
-			<a asp-action="Details" asp-route-id="@club.Id">@club.Name</a> |
-			<a asp-action="Edit" asp-route-id="@club.Id">Düzenle</a> |
-			<a asp-action="Delete" asp-route-id="@club.Id">Sil</a>
-			</li>
-	}
-</ul>
+    .kp-showcase-card {
+        position: relative;
+        background: linear-gradient(165deg, #ffffff 0%, #f5f3fc 68%, #fdf6f2 100%);
+        border: 1px solid rgba(114, 102, 214, 0.16);
+        border-radius: 22px;
+        padding: 1.25rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(74, 66, 150, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+        .kp-showcase-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--kp-card-bar, linear-gradient(90deg, #5b4cf5, #3b82f6));
+        }
+
+        .kp-showcase-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(91, 76, 245, 0.34);
+            box-shadow: 0 16px 30px rgba(74, 66, 150, 0.11);
+        }
+
+    .kp-bar-teknoloji {
+        --kp-card-bar: linear-gradient(90deg, #2563eb, #3b82f6);
+    }
+
+    .kp-bar-sanat {
+        --kp-card-bar: linear-gradient(90deg, #e11d48, #f43f5e);
+    }
+
+    .kp-bar-spor {
+        --kp-card-bar: linear-gradient(90deg, #059669, #10b981);
+    }
+
+    .kp-bar-sosyal {
+        --kp-card-bar: linear-gradient(90deg, #d97706, #f59e0b);
+    }
+
+
+    @@media (max-width: 575.98px) {
+        .kp-unified-stage {
+            padding: 1rem;
+            border-radius: 20px;
+        }
+    }
+</style>
+
+<section class="py-4">
+    <div class="kp-unified-stage">
+        <!-- Başlık ve Yeni Kulüp Butonu -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-1" style="color: var(--kp-navy); font-size: clamp(1.75rem, 3.2vw, 2.25rem); letter-spacing: -0.02em;">
+                    Kulüpleri Keşfet!
+                </h1>
+                <p class="mb-0" style="color: var(--kp-muted);">
+                    İlgi alanına uygun topluluğu bul, kampüs yaşamına yön ver.
+                </p>
+            </div>
+
+            <a asp-action="Create" class="kp-btn-coral text-decoration-none d-inline-flex align-items-center gap-1">
+                <i class="bi bi-plus-lg"></i>
+                <span>Yeni Kulüp Ekle</span>
+            </a>
+        </div>
+
+        <!-- Arama ve Kategori Filtresi -->
+        <form asp-action="Index" method="get" class="kp-filter-bar mb-4">
+            <div class="row g-2 align-items-center">
+                <div class="col-12 col-md-5">
+                    <div class="bg-white rounded-pill px-3 py-1 d-flex align-items-center shadow-sm">
+                        <i class="bi bi-search me-2" style="color: var(--kp-muted);"></i>
+                        <input type="text"
+                               name="searchString"
+                               value="@currentSearch"
+                               class="form-control border-0 bg-transparent shadow-none py-1"
+                               placeholder="Kulüp adına göre ara..." />
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <select name="categoryFilter"
+                            asp-items="Html.GetEnumSelectList<ClubCategory>()"
+                            class="form-select rounded-pill py-2 px-3 bg-white border-0 shadow-sm"
+                            style="color: var(--kp-text); font-weight: 500;">
+                        <option value="">-- Tüm Kategoriler --</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3 d-flex align-items-center gap-2">
+                    <button type="submit" class="kp-btn-navy flex-fill py-2">
+                        Filtrele
+                    </button>
+                    @if (!string.IsNullOrWhiteSpace(currentSearch) || currentCategory.HasValue)
+                    {
+                        <a asp-action="Index" class="kp-btn-ghost text-decoration-none py-2 px-3">
+                            Temizle
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+
+        <!-- Kulüp Kartları -->
+        @if (!Model.Any())
+        {
+            <div class="kp-showcase-card text-center py-5">
+                <span class="fs-1 d-block mb-2">🔍</span>
+                <h2 class="h6 fw-bold mb-1" style="color: var(--kp-navy);">Aramanızla eşleşen kulüp bulunamadı</h2>
+                <p class="small mb-3" style="color: var(--kp-muted);">Farklı bir anahtar kelime veya kategori deneyebilirsin.</p>
+                <a asp-action="Index" class="kp-btn-ghost text-decoration-none d-inline-block">Filtreleri Sıfırla</a>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                @foreach (var club in Model)
+                {
+                    var (badgeClass, emojiIcon, iconBg, barClass) = club.Category switch
+                    {
+                        ClubCategory.Teknoloji => ("kp-cat-teknoloji", "💻", "background: #dbeafe; color: #1d4ed8;", "kp-bar-teknoloji"),
+                        ClubCategory.Sanat => ("kp-cat-sanat", "🎭", "background: #ffe4e6; color: #be123c;", "kp-bar-sanat"),
+                        ClubCategory.Spor => ("kp-cat-spor", "🏆", "background: #d1fae5; color: #047857;", "kp-bar-spor"),
+                        _ => ("kp-cat-sosyal", "🤝", "background: #fef3c7; color: #b45309;", "kp-bar-sosyal")
+                    };
+
+                    <div class="col">
+                        <article class="kp-showcase-card @barClass">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span class="kp-icon-box" style="@iconBg">
+                                    @emojiIcon
+                                </span>
+                                <span class="kp-cat-pill @badgeClass">@club.Category</span>
+                            </div>
+
+                            <h2 class="h6 fw-bold mb-1" style="color: var(--kp-navy);">
+                                @club.Name
+                            </h2>
+
+                            <p class="small mb-3 flex-grow-1" style="color: var(--kp-muted); line-height: 1.55;">
+                                @(string.IsNullOrWhiteSpace(club.Description)
+                                    ? "Bu kulüp için henüz açıklama eklenmemiş."
+                                    : club.Description)
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-between gap-1 pt-2 border-top" style="border-color: rgba(114, 102, 214, 0.12) !important;">
+                                <a asp-action="Details" asp-route-id="@club.Id" class="kp-btn-navy text-decoration-none d-inline-flex align-items-center gap-1">
+                                    <span>İncele</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+
+                                <div class="d-flex align-items-center gap-1">
+                                    <a asp-action="Edit" asp-route-id="@club.Id" class="kp-btn-ghost text-decoration-none">
+                                        Düzenle
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@club.Id" class="kp-btn-ghost kp-btn-danger-ghost text-decoration-none">
+                                        Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

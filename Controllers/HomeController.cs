@@ -17,12 +17,19 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        var featuredClubs = await _context.Clubs
+     .OrderBy(c => c.Id)
+     .Take(3)
+     .ToListAsync();
+
         var upcomingEvents = await _context.Events
             .Include(e => e.Club)
-            .Where(e => e.EventDate >= DateTime.Now)
+            .Where(e => e.EventDate >= DateTime.Today)
             .OrderBy(e => e.EventDate)
+            .Take(4)
             .ToListAsync();
 
+        ViewBag.FeaturedClubs = featuredClubs;
         return View(upcomingEvents);
     }
 

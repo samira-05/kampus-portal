@@ -1,19 +1,177 @@
 @model IEnumerable<KampusPortal.Models.Event>
+@using KampusPortal.Models
 
-<h2>Etkinlikler</h2>
+@{
+    ViewData["Title"] = "Etkinlikler";
+}
 
-<p>
-    <a asp-action="Create">+ Yeni Etkinlik Ekle</a>
-</p>
-
-<ul>
-    @foreach (var item in Model)
-    {
-        <li>
-            <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
-            (@item.Club?.Name - @item.EventDate.ToString("dd.MM.yyyy HH:mm")) |
-            <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
-        </li>
+<style>
+    .kp-unified-stage {
+        background: rgba(255, 255, 255, 0.90);
+        border: 1px solid #ffffff;
+        border-radius: 28px;
+        padding: 1.65rem;
+        box-shadow: 0 16px 38px rgba(34, 38, 75, 0.07);
     }
-</ul>
+
+    .kp-event-rich-card {
+        position: relative;
+        background: linear-gradient(165deg, #ffffff 0%, #f5f3fc 68%, #fdf6f2 100%);
+        border: 1px solid rgba(114, 102, 214, 0.16);
+        border-radius: 22px;
+        padding: 1.25rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(74, 66, 150, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+        .kp-event-rich-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--kp-event-bar, linear-gradient(90deg, #2563eb, #3b82f6));
+        }
+
+        .kp-event-rich-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(91, 76, 245, 0.34);
+            box-shadow: 0 16px 30px rgba(74, 66, 150, 0.11);
+        }
+
+    .kp-event-meta-box {
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid #ebe6f8;
+        border-radius: 14px;
+        padding: 0.55rem 0.75rem;
+    }
+
+    @@media (max-width: 575.98px) {
+        .kp-unified-stage {
+            padding: 1rem;
+            border-radius: 20px;
+        }
+    }
+</style>
+
+<section class="py-3">
+    <div class="kp-unified-stage">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-1" style="color: var(--kp-navy); font-size: clamp(1.75rem, 3.2vw, 2.25rem); letter-spacing: -0.02em;">
+                    Kampüs Etkinlikleri
+                </h1>
+                <p class="mb-0" style="color: var(--kp-muted);">
+                    Kulüplerin düzenlediği atölyeleri, turnuvaları ve buluşmaları keşfet.
+                </p>
+            </div>
+
+            <a asp-action="Create" class="kp-btn-coral text-decoration-none d-inline-flex align-items-center gap-1">
+                <i class="bi bi-plus-lg"></i>
+                <span>Yeni Etkinlik Ekle</span>
+            </a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="kp-event-rich-card text-center py-5">
+                <span class="fs-1 d-block mb-2">📅</span>
+                <h2 class="h6 fw-bold mb-1" style="color: var(--kp-navy);">Henüz etkinlik bulunmuyor</h2>
+                <p class="small mb-3" style="color: var(--kp-muted);">Yeni bir kampüs etkinliği ekleyerek başlayabilirsin.</p>
+                <a asp-action="Create" class="kp-btn-coral text-decoration-none d-inline-block">Yeni Etkinlik Ekle</a>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                @foreach (var item in Model)
+                {
+                    var (badgeClass, emojiIcon, barStyle) = item.Club?.Category switch
+                    {
+                        ClubCategory.Teknoloji => ("kp-cat-teknoloji", "💻", "linear-gradient(90deg, #2563eb, #3b82f6)"),
+                        ClubCategory.Sanat => ("kp-cat-sanat", "🎭", "linear-gradient(90deg, #e11d48, #f43f5e)"),
+                        ClubCategory.Spor => ("kp-cat-spor", "🏆", "linear-gradient(90deg, #059669, #10b981)"),
+                        ClubCategory.Sosyal => ("kp-cat-sosyal", "🤝", "linear-gradient(90deg, #d97706, #f59e0b)"),
+                        _ => ("kp-cat-sosyal", "📅", "linear-gradient(90deg, #2563eb, #3b82f6)")
+                    };
+
+                    <div class="col">
+                        <article class="kp-event-rich-card" style="--kp-event-bar: @barStyle;">
+                            <!-- Üst Satır: Tarih Rozeti + Kategori -->
+                            <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="kp-date-badge">
+                                        <span class="day">@item.EventDate.ToString("dd")</span>
+                                        <span class="month">@item.EventDate.ToString("MMM")</span>
+                                    </span>
+
+                                    <div>
+                                        <div class="small fw-bold" style="color: var(--kp-navy);">
+                                            @item.EventDate.ToString("dd MMMM yyyy")
+                                        </div>
+                                        <div class="small" style="color: var(--kp-muted); font-size: 0.78rem;">
+                                            🕒 Saat @item.EventDate.ToString("HH:mm")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (item.Club != null)
+                                {
+                                    <span class="kp-cat-pill @badgeClass">
+                                        @emojiIcon @item.Club.Category
+                                    </span>
+                                }
+                            </div>
+
+                            <!-- Başlık & Açıklama -->
+                            <h2 class="h6 fw-bold mb-1" style="color: var(--kp-navy);">
+                                @item.Title
+                            </h2>
+
+                            <p class="small mb-3 flex-grow-1" style="color: var(--kp-muted); line-height: 1.55;">
+                                @(string.IsNullOrWhiteSpace(item.Description)
+                                    ? "Bu etkinlik için henüz açıklama eklenmemiş."
+                                    : item.Description)
+                            </p>
+
+                            <!-- Kulüp ve Konum Bilgi Kutusu -->
+                            <div class="kp-event-meta-box mb-3 d-flex flex-column gap-1">
+                                @if (item.Club != null)
+                                {
+                                    <div class="small text-truncate" style="color: var(--kp-navy); font-weight: 600;">
+                                        🏛️ @item.Club.Name
+                                    </div>
+                                }
+                                <div class="small text-truncate" style="color: var(--kp-muted);">
+                                    📍 @item.Location
+                                </div>
+                            </div>
+
+                            <!-- Alt Butonlar -->
+                            <div class="d-flex align-items-center justify-content-between gap-1 pt-2 border-top" style="border-color: rgba(114, 102, 214, 0.12) !important;">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="kp-btn-navy text-decoration-none d-inline-flex align-items-center gap-1">
+                                    <span>İncele</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+
+                                <div class="d-flex align-items-center gap-1">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="kp-btn-ghost text-decoration-none">
+                                        Düzenle
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="kp-btn-ghost kp-btn-danger-ghost text-decoration-none">
+                                        Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

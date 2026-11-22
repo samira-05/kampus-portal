@@ -1,16 +1,39 @@
-@model KampusPortal.Models.Event
+@model Event
 
-<h2>Etkinliği Sil</h2>
-<p>Bu etkinliği silmek istediğinize emin misiniz?</p>
+@{
+    ViewData["Title"] = "Etkinliği Sil";
+}
 
-<div>
-    <strong>@Model.Title</strong> (@Model.Club?.Name - @Model.EventDate.ToString("dd.MM.yyyy HH:mm"))
+<div class="row justify-content-center my-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="bg-white rounded-4 shadow-sm p-4 p-md-5" style="border: 1px solid rgba(220, 38, 38, 0.16);">
+            <h1 class="h4 fw-bold mb-2" style="color: #1e1b4b;">Etkinliği Sil</h1>
+            <p class="text-muted small mb-4">Bu etkinliği silmek istediğine emin misin? Bu işlem geri alınamaz.</p>
+
+            <div class="p-3 rounded-4 mb-4" style="background: #f8f7ff;">
+                <div class="fw-bold mb-2" style="color: #1e1b4b;">@Model.Title</div>
+                <div class="small text-muted mb-1">
+                    <strong>Kulüp:</strong> @(Model.Club?.Name ?? "-")
+                </div>
+                <div class="small text-muted mb-1">
+                    <strong>Tarih ve Saat:</strong> @Model.EventDate.ToString("dd.MM.yyyy HH:mm")
+                </div>
+                <div class="small text-muted">
+                    <strong>Konum:</strong> @Model.Location
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <button type="submit" class="btn btn-danger px-4 py-2 rounded-pill fw-semibold">
+                        Evet, Sil
+                    </button>
+                    <a asp-action="Index" class="btn btn-light px-4 py-2 rounded-pill border">
+                        Vazgeç
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-<br />
-
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" style="color:red">Evet, Sil</button>
-    <a asp-action="Index">Vazgeç</a>
-</form>
-
