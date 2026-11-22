@@ -102,7 +102,7 @@
 
                     <div class="col">
                         <article class="kp-event-rich-card" style="--kp-event-bar: @barStyle;">
-                            <!-- Üst Satır: Tarih Rozeti + Kategori -->
+                          
                             <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="kp-date-badge">
@@ -128,7 +128,7 @@
                                 }
                             </div>
 
-                            <!-- Başlık & Açıklama -->
+                            
                             <h2 class="h6 fw-bold mb-1" style="color: var(--kp-navy);">
                                 @item.Title
                             </h2>
@@ -139,7 +139,6 @@
                                     : item.Description)
                             </p>
 
-                            <!-- Kulüp ve Konum Bilgi Kutusu -->
                             <div class="kp-event-meta-box mb-3 d-flex flex-column gap-1">
                                 @if (item.Club != null)
                                 {
@@ -152,7 +151,6 @@
                                 </div>
                             </div>
 
-                            <!-- Alt Butonlar -->
                             <div class="d-flex align-items-center justify-content-between gap-1 pt-2 border-top" style="border-color: rgba(114, 102, 214, 0.12) !important;">
                                 <a asp-action="Details" asp-route-id="@item.Id" class="kp-btn-navy text-decoration-none d-inline-flex align-items-center gap-1">
                                     <span>İncele</span>

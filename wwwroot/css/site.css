@@ -27,7 +27,6 @@ body.kp-body {
     margin: 0;
 }
 
-/* Üst Menü */
 .kp-navbar {
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(10px);
@@ -112,7 +111,6 @@ body.kp-body {
     font-size: 0.95rem;
 }
 
-/* Ana Kapsayıcı Panel ve Kartlar */
 .kp-board {
     background: rgba(255, 255, 255, 0.82);
     border: 1px solid #ffffff;
@@ -139,7 +137,6 @@ body.kp-body {
         box-shadow: 0 12px 26px rgba(29, 32, 68, 0.09);
     }
 
-/* Kategori İkon Kutusu ve Rozetleri */
 .kp-icon-box {
     width: 40px;
     height: 40px;
@@ -179,7 +176,6 @@ body.kp-body {
     color: #2c7049;
 }
 
-/* Tarih Rozeti */
 .kp-date-badge {
     width: 48px;
     height: 52px;
@@ -206,7 +202,6 @@ body.kp-body {
         color: var(--kp-muted);
     }
 
-/* Butonlar */
 .kp-btn-coral {
     background: linear-gradient(135deg, var(--kp-coral-start), var(--kp-coral-end));
     color: #ffffff;
@@ -277,7 +272,6 @@ body.kp-body {
     }
 }
 
-/* Kategoriye özel belirgin rozetler */
 .kp-cat-teknoloji {
     background-color: #dbeafe;
     color: #1d4ed8;
@@ -298,7 +292,6 @@ body.kp-body {
     color: #b45309;
 }
 
-/* Kart üst şeritleri için belirgin kategori gradyanları */
 .kp-bar-teknoloji {
     --kp-card-bar: linear-gradient(90deg, #2563eb, #4f46e5);
 }
