@@ -30,6 +30,17 @@ Uygulama SQLite üzerinde iki ana tablo ve aralarındaki bire-çok (`1:N`) iliş
 | **Clubs** | `Id`, `Name`, `Description`, `Category` | Öğrenci kulüplerini tutar. `Category` alanı `enum` (`Teknoloji`, `Sanat`, `Spor`, `Sosyal`) olarak tanımlanmıştır. |
 | **Events** | `Id`, `Title`, `Description`, `EventDate`, `Location`, `ClubId` | Etkinlik bilgilerini tutar. `ClubId` yabancı anahtarı (*Foreign Key*) ile ilgili kulübe bağlanır. |
 
+## Ekran Görüntüleri
+
+### 1. Ana Sayfa
+<img width="1892" height="861" alt="Ana Sayfa" src="https://github.com/user-attachments/assets/0658d5a3-8881-4ddd-8d53-27881323cd9f" />
+
+### 2. Kulüpler Sayfası
+<img width="1882" height="855" alt="Külüpler Sayfası" src="https://github.com/user-attachments/assets/2a5dc2bf-4e44-46a3-89ad-591b07e8f7c6" />
+
+### 3. Kampüs Etkinlikleri Sayfası
+<img width="1890" height="857" alt="Etkinlikler Sayfası" src="https://github.com/user-attachments/assets/b60aef75-75c8-428e-b61f-2c9005ecf695" />
+
 ## Proje Klasör Yapısı
 
 ```text
@@ -52,13 +63,3 @@ KampusPortal/
 │   └── Shared/                  # Ortak yerleşim (_Layout.cshtml) ve navigasyon menüsü
 └── Program.cs                   # Uygulama yapılandırması, servis kayıtları ve yönlendirme
 
-## Ekran Görüntüleri
-
-### 1. Ana Sayfa
-<img width="1892" height="861" alt="Ana Sayfa" src="https://github.com/user-attachments/assets/0658d5a3-8881-4ddd-8d53-27881323cd9f" />
-
-### 2. Kulüpler Sayfası
-<img width="1882" height="855" alt="Külüpler Sayfası" src="https://github.com/user-attachments/assets/2a5dc2bf-4e44-46a3-89ad-591b07e8f7c6" />
-
-### 3. Kampüs Etkinlikleri Sayfası
-<img width="1890" height="857" alt="Etkinlikler Sayfası" src="https://github.com/user-attachments/assets/b60aef75-75c8-428e-b61f-2c9005ecf695" />
